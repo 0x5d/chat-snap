@@ -1,0 +1,15 @@
+{
+  "name": "file-transfer",
+  "version": "1.0.0",
+  "description": "A socket.io file transfer example.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "castillobg",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.4.8"
+  }
+}
