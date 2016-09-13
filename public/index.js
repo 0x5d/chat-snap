@@ -8,13 +8,26 @@
   let socket = io.connect()
 
   // Get access to the camera!
-  if(Modernizr.getusermedia) {
-    navigator.mediaDevices.getUserMedia({ video: true })
+  const options = { video: true }
+  // Try to use latest API.
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia(options)
       .then(initVideo)
       .catch(handleError)
   } else {
-    alert("Sorry, your browser doesn't support video :(")
+    // Fall back to deprecated API if available.
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    if (navigator.getUserMedia) {
+      navigator.getUserMedia(options, initVideo, handleError)
+    } else {
+      alert("Sorry, your browser doesn't support video :(")
+    }
   }
+
+  // Trigger photo
+  document.getElementById('snap').addEventListener('click', snap)
+
+  socket.on('file', processFile)
 
   function initVideo (stream) {
     video.src = window.URL.createObjectURL(stream)
@@ -22,22 +35,24 @@
   }
 
   function handleError (err) {
-    alert("Something happened. Try again, maybe? :)")
+    alert('Something happened. Try again, maybe? :)')
   }
 
-  // Trigger photo
-  document.getElementById("snap").addEventListener("click", function() {
+  function snap () {
     context.drawImage(video, 0, 0, 640, 480)
-    canvas.toBlob(function (blob) {
+    canvas.toBlob(function emitBlob (blob) {
       socket.emit('file', blob)
     })
-  })
+  }
 
-
-  socket.on('file', function (arrayBuffer) {
+  function processFile (arrayBuffer) {
     var blob = new Blob([arrayBuffer])
-    createImageBitmap(blob).then(function(image){
-      context.drawImage(image, 0, 0, 320, 240)
-    })
-  })
+    createImageBitmap(blob)
+      .then(function drawImage (image) {
+        context.drawImage(image, 0, 0, 320, 240)
+      })
+      .catch(function handleImageError () {
+        alert('Something happened. Try again, maybe? :)')
+      })
+  }
 })()
