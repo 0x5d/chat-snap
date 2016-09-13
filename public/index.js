@@ -1,9 +1,11 @@
 (function(){// Grab elements, create settings, etc.
-  let video = document.getElementById('video');
-  let canvas = document.getElementById('canvas');
-  let context = canvas.getContext('2d');
+  'use strict'
 
-  let socket = io.connect();
+  let video = document.getElementById('video')
+  let canvas = document.getElementById('canvas')
+  let context = canvas.getContext('2d')
+
+  let socket = io.connect()
 
   // Get access to the camera!
   if(Modernizr.getusermedia) {
@@ -15,8 +17,8 @@
   }
 
   function initVideo (stream) {
-    video.src = window.URL.createObjectURL(stream);
-    video.play();
+    video.src = window.URL.createObjectURL(stream)
+    video.play()
   }
 
   function handleError (err) {
@@ -25,17 +27,17 @@
 
   // Trigger photo
   document.getElementById("snap").addEventListener("click", function() {
-    context.drawImage(video, 0, 0, 640, 480);
+    context.drawImage(video, 0, 0, 640, 480)
     canvas.toBlob(function (blob) {
-      socket.emit('file', blob);
-    });
-  });
+      socket.emit('file', blob)
+    })
+  })
 
 
   socket.on('file', function (arrayBuffer) {
     var blob = new Blob([arrayBuffer])
     createImageBitmap(blob).then(function(image){
-      context.drawImage(image, 0, 0, 320, 240);
-    });
-  });
+      context.drawImage(image, 0, 0, 320, 240)
+    })
+  })
 })()
