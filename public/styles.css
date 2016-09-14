@@ -1,0 +1,16 @@
+#feed {
+  overflow-y: scroll;
+  height: 65%;
+}
+
+.me {
+  border: 4px;
+  border-radius: 4px;
+  border-color: blue;
+}
+
+.them {
+  border: 4px;
+  border-radius: 4px;
+  border-color: green;
+}
