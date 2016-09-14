@@ -1,8 +1,7 @@
-(function(){// Grab elements, create settings, etc.
+$(function(){// Grab elements, create settings, etc.
   'use strict'
 
   let video = document.getElementById('video')
-  let feed = document.getElementById('feed')
 
   let socket = io.connect()
 
@@ -24,7 +23,7 @@
   }
 
   // Trigger photo
-  document.getElementById('snap').addEventListener('click', snap)
+  $('#snap').on('click', snap)
 
   socket.on('file', processFile)
 
@@ -38,9 +37,8 @@
   }
 
   function snap () {
-    let newImageCanvas = createImageElement(video)
-    newImageCanvas.className = 'them'
-    feed.appendChild(newImageCanvas)
+    let newImageCanvas = createCanvasFrom(video)
+    renderImageElement(newImageCanvas, 'me')
     newImageCanvas.toBlob(function emitBlob (blob) {
       socket.emit('file', blob)
     })
@@ -50,20 +48,28 @@
     var blob = new Blob([arrayBuffer])
     createImageBitmap(blob)
       .then(function drawImage (image) {
-        let newImageCanvas = createImageElement(image)
-        newImageCanvas.className = 'me'
-        feed.appendChild(newImageCanvas)
+        let newImageCanvas = createCanvasFrom(image)
+        renderImageElement(newImageCanvas, 'them')
       })
       .catch(function handleImageError () {
         alert('Something happened. Try again, maybe? :)')
       })
   }
 
-  function createImageElement (image) {
-    let newImageCanvas = document.createElement('canvas')
-    newImageCanvas.width = image.width
-    newImageCanvas.height = image.height
-    newImageCanvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height)
-    return newImageCanvas
+  function createCanvasFrom (image) {
+    let imgCanvas = document.createElement('canvas')
+    imgCanvas.width = image.width
+    imgCanvas.height = image.height
+    imgCanvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height)
+    return imgCanvas
   }
-})()
+
+  function renderImageElement (canvas, htmlClass) {
+    let container = $('<div></div>')
+    if (htmlClass) {
+      container.addClass(htmlClass)
+    }
+    $(canvas).appendTo(container)
+    container.appendTo('#feed')
+  }
+})

@@ -1,0 +1,13 @@
+{
+  "name": "chat-snap",
+  "description": "A socket.io file transfer example.",
+  "main": "main.js",
+  "authors": [
+    "castillobg"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/castillobg/chat-snap",
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
