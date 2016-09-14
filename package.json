@@ -4,7 +4,7 @@
   "description": "A socket.io file transfer example.",
   "main": "main.js",
   "scripts": {
-    "start": "bower install && node main.js"
+    "start": "node main.js"
   },
   "author": "castillobg",
   "license": "MIT",
