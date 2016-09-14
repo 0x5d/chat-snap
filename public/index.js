@@ -2,8 +2,7 @@
   'use strict'
 
   let video = document.getElementById('video')
-  let canvas = document.getElementById('canvas')
-  let context = canvas.getContext('2d')
+  let feed = document.getElementById('feed')
 
   let socket = io.connect()
 
@@ -39,8 +38,10 @@
   }
 
   function snap () {
-    context.drawImage(video, 0, 0, 640, 480)
-    canvas.toBlob(function emitBlob (blob) {
+    let newImageCanvas = createImageElement(video)
+    newImageCanvas.className = 'them'
+    feed.appendChild(newImageCanvas)
+    newImageCanvas.toBlob(function emitBlob (blob) {
       socket.emit('file', blob)
     })
   }
@@ -49,10 +50,20 @@
     var blob = new Blob([arrayBuffer])
     createImageBitmap(blob)
       .then(function drawImage (image) {
-        context.drawImage(image, 0, 0, 320, 240)
+        let newImageCanvas = createImageElement(image)
+        newImageCanvas.className = 'me'
+        feed.appendChild(newImageCanvas)
       })
       .catch(function handleImageError () {
         alert('Something happened. Try again, maybe? :)')
       })
+  }
+
+  function createImageElement (image) {
+    let newImageCanvas = document.createElement('canvas')
+    newImageCanvas.width = image.width
+    newImageCanvas.height = image.height
+    newImageCanvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height)
+    return newImageCanvas
   }
 })()
