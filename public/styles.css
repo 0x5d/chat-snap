@@ -4,13 +4,17 @@
 }
 
 .me {
-  border: 4px;
-  border-radius: 4px;
-  border-color: blue;
+  border-radius: 15px 15px 0px 15px;
+  background-color: #54C7EC;
+  padding: 15px;
 }
 
 .them {
-  border: 4px;
-  border-radius: 4px;
-  border-color: green;
+  border-radius: 15px 15px 15px 0px;
+  background-color: #F1F0F0;
+  padding: 15px;
+}
+
+.me, .them {
+  margin-bottom: 10px;
 }

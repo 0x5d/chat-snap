@@ -11,8 +11,10 @@
   <body>
     <h1>chat-snap</h1>
     <div id="feed"></div>
-    <video id="video" width="320" height="240" autoplay></video>
-    <button id="snap">Snap Photo</button>
+    <div class="row">
+      <video id="video" width="320" height="240" autoplay></video>
+      <button id="snap" class="large button">Snap Photo</button>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/lib/jquery/dist/jquery.js"></script>
     <script src="/index.js"></script>

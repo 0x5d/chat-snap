@@ -1,8 +1,6 @@
 $(function(){// Grab elements, create settings, etc.
   'use strict'
 
-  let video = document.getElementById('video')
-
   let socket = io.connect()
 
   // Get access to the camera!
@@ -28,12 +26,9 @@ $(function(){// Grab elements, create settings, etc.
   socket.on('file', processFile)
 
   function initVideo (stream) {
+    let video = document.getElementById('video')
     video.src = window.URL.createObjectURL(stream)
     video.play()
-  }
-
-  function handleError (err) {
-    alert('Something happened. Try again, maybe? :)')
   }
 
   function snap () {
@@ -51,9 +46,7 @@ $(function(){// Grab elements, create settings, etc.
         let newImageCanvas = createCanvasFrom(image)
         renderImageElement(newImageCanvas, 'them')
       })
-      .catch(function handleImageError () {
-        alert('Something happened. Try again, maybe? :)')
-      })
+      .catch(handleError)
   }
 
   function createCanvasFrom (image) {
@@ -64,12 +57,27 @@ $(function(){// Grab elements, create settings, etc.
     return imgCanvas
   }
 
-  function renderImageElement (canvas, htmlClass) {
-    let container = $('<div></div>')
-    if (htmlClass) {
-      container.addClass(htmlClass)
+  function renderImageElement (canvas, source) {
+    let row = $('<div></div>')
+    row.addClass('row')
+
+    let imgContainer = $('<div></div>')
+    imgContainer.addClass('small-4 columns ' + source)
+    imgContainer.appendTo(row)
+
+    $(canvas).appendTo(imgContainer)
+
+    if (source === 'me') {
+      let fill = $('<div></div>')
+      fill.addClass('small-8 columns')
+      fill.prependTo(row)
     }
-    $(canvas).appendTo(container)
-    container.appendTo('#feed')
+    row.appendTo('#feed')
+    row.get(0).scrollIntoView()
+  }
+
+  function handleError (err) {
+    alert('Something happened. Try again, maybe? :)')
+    console.error(err)
   }
 })
