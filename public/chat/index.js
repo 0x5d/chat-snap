@@ -1,7 +1,13 @@
-$(function(){// Grab elements, create settings, etc.
+$(function () {
   'use strict'
 
+  const id = getChatId()
+  if (id === '') {
+    window.location = '/'
+  }
+
   let socket = io.connect()
+  socket.emit('enter', id)
 
   // Get access to the camera!
   const options = { video: true }
@@ -12,7 +18,9 @@ $(function(){// Grab elements, create settings, etc.
       .catch(handleError)
   } else {
     // Fall back to deprecated API if available.
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    navigator.getUserMedia = navigator.getUserMedia || 
+                             navigator.webkitGetUserMedia || 
+                             navigator.mozGetUserMedia
     if (navigator.getUserMedia) {
       navigator.getUserMedia(options, initVideo, handleError)
     } else {
@@ -74,6 +82,14 @@ $(function(){// Grab elements, create settings, etc.
     }
     row.appendTo('#feed')
     row.get(0).scrollIntoView()
+  }
+
+  function getChatId() {
+    let id = ''
+    window.location.search.replace(/[?&]+id=([^&]*)/, function (m, value) {
+      id = value
+    })
+    return id
   }
 
   function handleError (err) {

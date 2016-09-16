@@ -10,9 +10,13 @@
   </head>
   <body>
     <h1 class="text-center">chat-snap</h1>
-    <h3 class="text-center">Real time photo-chat.</h3>
-    <form class="text-center" action="/chat" method="POST">
-      <input type="submit" id="snap" class="large button" value="Start chatting!"></input>
-    </form>
+    <div id="feed"></div>
+    <div class="row">
+      <video id="video" width="320" height="240" autoplay></video>
+      <button id="snap" class="large button">Snap Photo</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/chat/index.js"></script>
   </body>
 </html>
