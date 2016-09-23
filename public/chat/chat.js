@@ -48,15 +48,13 @@ $(function () {
   function snap () {
     let newImageCanvas = createCanvasFrom(video)
     renderImageElement(newImageCanvas, 'me')
-    newImageCanvas.toBlob(function emitBlob (blob) {
-      socket.emit('file', blob)
-    })
+    newImageCanvas.toBlob(blob => socket.emit('file', blob))
   }
 
   function processFile (arrayBuffer) {
-    var blob = new Blob([arrayBuffer])
-    createImageBitmap(blob)
-      .then(function drawImage (image) {
+    let imageBlob = new Blob([arrayBuffer])
+    createImageBitmap(imageBlob)
+      .then(image => {
         let newImageCanvas = createCanvasFrom(image)
         renderImageElement(newImageCanvas, 'them')
       })
