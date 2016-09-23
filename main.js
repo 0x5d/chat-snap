@@ -1,27 +1,23 @@
 const sentencer = require('sentencer');
 const express = require('express')
 const app = express()
-app.use(express.static('public'))
-
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
-
 io.on('connection', handleConnection)
-
-app.post('/chat', function createChat (req, res) {
-  res.redirect('/chat/?id=' + sentencer.make('{{ adjective }}-{{ noun }}'))
-})
-
 const PORT = process.env.PORT || 3000
-server.listen(PORT, function handleListen () {
-  console.log('chat-snap is listening on port ' + PORT)
+
+app.use(express.static('public'))
+
+app.post('/chat', (req, res) => {
+  const sessionId = sentencer.make('{{ adjective }}-{{ noun }}')
+  res.redirect(`/chat/?id=${sessionId}`)
 })
+
+server.listen(PORT, () => console.log(`chat-snap is listening on port ${PORT}`))
 
 function handleConnection (socket) {
-  socket.on('enter', function (id) {
+  socket.on('enter', id => {
     socket.join(id)
-    socket.on('file', function (file) {
-      socket.broadcast.to(id).emit('file', file)
-    })
+    socket.on('file', file => socket.broadcast.to(id).emit('file', file))
   })
 }
