@@ -67,17 +67,17 @@ $(() => {
     return imgCanvas
   }
 
-  function renderImageElement (canvas, source) {
+  function renderImageElement (canvas, sender) {
     let $row = $('<div></div>')
     $row.addClass('row')
 
     let $imgContainer = $('<div></div>')
-    $imgContainer.addClass(`small-4 columns ${source}`)
+    $imgContainer.addClass(`small-4 columns ${sender}`)
     $imgContainer.appendTo($row)
 
     $(canvas).appendTo($imgContainer)
 
-    if (source === 'me') {
+    if (sender === 'me') {
       let $fill = $('<div></div>')
       $fill.addClass('small-8 columns')
       $fill.prependTo($row)
