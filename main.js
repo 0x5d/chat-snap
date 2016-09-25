@@ -1,4 +1,4 @@
-const sentencer = require('sentencer');
+const sentencer = require('sentencer')
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
