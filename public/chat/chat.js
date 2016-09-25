@@ -1,21 +1,20 @@
-$(function () {
-  'use strict'
+$(() => {
 
-  let socket
+  const id = window.location.search.substring(1).split('=')[1]
 
-  window.location.search.replace(/[?&]+id=([^&]*)/, (m, id) => {
-    if (id === '') {
-      window.location = '/'
-      return
-    }
+  if (!id || id === '') {
+    window.location = '/'
+    return
+  }
 
-    socket = io.connect()
-    socket.on('file', processFile)
-    socket.emit('enter', id)
-    initVideo()
-    // Trigger photo
-    $('#snap').on('click', snap)
-  })
+  const socket = io.connect()
+  const video = document.getElementById('video')
+
+  socket.on('file', processFile)
+  socket.emit('enter', id)
+  initVideo()
+  // Trigger photo
+  $('#snap').on('click', snap)
 
 
   function initVideo () {
@@ -29,8 +28,8 @@ $(function () {
     } else {
       // Fall back to deprecated API if available.
       navigator.getUserMedia = navigator.getUserMedia || 
-                              navigator.webkitGetUserMedia || 
-                              navigator.mozGetUserMedia
+                               navigator.webkitGetUserMedia || 
+                               navigator.mozGetUserMedia
       if (navigator.getUserMedia) {
         navigator.getUserMedia(options, initPreview, handleError)
       } else {
@@ -40,7 +39,6 @@ $(function () {
   }
 
   function initPreview (stream) {
-    let video = document.getElementById('video')
     video.src = window.URL.createObjectURL(stream)
     video.play()
   }
@@ -61,11 +59,11 @@ $(function () {
       .catch(handleError)
   }
 
-  function createCanvasFrom (image) {
+  function createCanvasFrom (media) {
     let imgCanvas = document.createElement('canvas')
-    imgCanvas.width = image.width
-    imgCanvas.height = image.height
-    imgCanvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height)
+    imgCanvas.width = media.width
+    imgCanvas.height = media.height
+    imgCanvas.getContext('2d').drawImage(media, 0, 0, media.width, media.height)
     return imgCanvas
   }
 
