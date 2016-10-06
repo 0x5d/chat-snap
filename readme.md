@@ -1,13 +1,18 @@
 # chat-snap
 A simple, websockets-based image-only photo-chat.
 
+## Dependencies
+
+- [Node.js](https://nodejs.org/)
+- [**Latest** Google Chrome](https://www.google.com/chrome/)
+
 ## Install
 Make sure bower is installed:
 ```sh
 npm install -g bower
 ```
 
-To install back-end and fron-end deps, run
+To install back-end and front-end deps, run
 ```sh
 npm install && bower install
 ```
